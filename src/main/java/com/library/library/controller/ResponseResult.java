@@ -2,8 +2,6 @@ package com.library.library.controller;
 
 import java.io.Serializable;
 
-import jakarta.validation.constraints.Null;
-
 public class ResponseResult<T> implements Serializable {
   /**
    * 状态值
@@ -37,11 +35,15 @@ public class ResponseResult<T> implements Serializable {
    * 失败
    */
   public static <T> ResponseResult<T> fail(T data, String message) {
-    return new ResponseResult<T>(ResultCode.SUCCESS, data, message);
+    return new ResponseResult<T>(ResultCode.SYSTEM_ERROR, data, message);
   }
 
   public static <T> ResponseResult<T> fail(String message) {
-    return new ResponseResult<T>(ResultCode.SUCCESS, null, message);
+    return new ResponseResult<T>(ResultCode.SYSTEM_ERROR, null, message);
+  }
+
+  public static <T> ResponseResult<T> fail(int code, String message) {
+    return new ResponseResult<T>(code, null, message);
   }
 
   public int getCode() {

@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserVO {
+public class UserRegisterVO {
   @NotNull(message = "账号不能为空")
   private String account;
   @NotEmpty(message = "用户名不能为空")

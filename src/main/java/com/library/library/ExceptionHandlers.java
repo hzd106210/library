@@ -28,4 +28,20 @@ public class ExceptionHandlers {
         .collect(Collectors.joining("| "));
     return ResponseResult.fail(null, errMsg);
   }
+
+  // 全局处理没有请求体抛出的错误
+  // @ExceptionHandler(HttpMessageNotReadableException.class)
+  // @ResponseBody
+  // public ResponseEntity<String>
+  // handleHttpMessageNotReadableException(HttpServletRequest request,
+  // HttpMessageNotReadableException ex) {
+  // System.err.println(request.getMethod());
+  // if (request.getMethod().equals(RequestMethod.POST.name())) {
+  // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request body is
+  // missing");
+  // } else {
+  // return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+  // .body("Unsupported HTTP method: " + request.getMethod());
+  // }
+  // }
 }
