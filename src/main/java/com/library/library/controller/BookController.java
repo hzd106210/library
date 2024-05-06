@@ -21,9 +21,7 @@ public class BookController {
   private BookDAOImpl bookDAOImpl;
 
   public ResponseResult<ListBean<BookBean>> queryAll(@Valid @RequestBody BookVO.QueryAll params) {
-    int pageSize = params.getPageSize();
     ListBean<BookBean> list = bookDAOImpl.findAll(params);
-
     return ResponseResult.success(list, "查询成功");
   }
 
@@ -46,7 +44,7 @@ public class BookController {
     bookBean.setAuth(params.getAuth());
     bookBean.setDesc(params.getDesc());
     bookBean.setPublishingHouse(params.getPublishingHouse());
-    bookBean.setAuth(type == null ? "" : type);
+    bookBean.setType(type == null ? "" : type);
     // 默认库存为0
     bookBean.setStock(String.valueOf(stock).equals("") ? 0 : stock);
     bookBean.setBorrowNum(0);

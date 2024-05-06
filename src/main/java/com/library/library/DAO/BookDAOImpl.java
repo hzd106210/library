@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -85,8 +86,9 @@ public class BookDAOImpl implements BookDAO {
 
   @Override
   public boolean addBook(BookBean book) {
-    String sql = "insert into book (cover,name,desc,auth,publishing_house,type,stock,borrow_num,create_time,status) values (?,?,?,?,?,?,?,?,?,?)";
-    int update = jdbcTemplate.update(sql, book.getCover(), book.getName(), book.getDesc(), book.getPublishingHouse(),
+    String sql = "insert into book (`cover`,`name`,`desc`,`auth`,`publishing_house`,`type`,`stock`,`borrow_num`,`create_time`,`status`) values (?,?,?,?,?,?,?,?,?,?);";
+    int update = jdbcTemplate.update(sql, book.getCover(), book.getName(), book.getDesc(), book.getAuth(),
+        book.getPublishingHouse(),
         book.getType(), book.getStock(), 0, new Date(), 0);
     return update > 0;
   }
@@ -100,9 +102,18 @@ public class BookDAOImpl implements BookDAO {
 
   @Override
   public boolean hasBook(String name, String auth, String publishingHouse) {
-    String sql = "select 1 from book where name=? and auth=? and publishing_house=? limit 1";
-    Integer exist = jdbcTemplate.queryForObject(sql, Integer.class, name, auth, publishingHouse);
-    return exist != null;
+    try {
+      String sql = "select id from book where name=? and auth=? and publishing_house=?;";
+      Integer exist = jdbcTemplate.queryForObject(sql, Integer.class, name, auth, publishingHouse);
+      return exist != null;
+    } catch (DataAccessException e) {
+      e.printStackTrace();
+      if (e.getMessage().indexOf("expected 1") > -1) {
+        return false;
+      } else {
+        throw e;
+      }
+    }
   }
 
 }

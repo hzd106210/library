@@ -24,7 +24,7 @@ public class ExceptionHandlers {
   public ResponseResult<String> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
     System.err.println(e.toString());
     String errMsg = e.getBindingResult().getFieldErrors().stream()
-        .map(f -> f.getField() + ":" + f.getDefaultMessage())
+        .map(f -> f.getDefaultMessage())
         .collect(Collectors.joining("| "));
     return ResponseResult.fail(null, errMsg);
   }
