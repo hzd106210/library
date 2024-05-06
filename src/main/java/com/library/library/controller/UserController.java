@@ -29,7 +29,7 @@ public class UserController {
    * 登录
    */
   @RequestMapping(method = RequestMethod.POST, value = "/login")
-  public ResponseResult<String> login(@Valid @RequestBody(required = false) UserLoginVO params) {
+  public ResponseResult<String> login(@Valid @RequestBody(required = false) UserVO.Login params) {
     if (params == null) {
       return ResponseResult.fail(ResultCode.CLIENT_ERROR, "参数不能为空");
     }
@@ -58,17 +58,23 @@ public class UserController {
    * 注册
    */
   @RequestMapping(value = "/register", method = RequestMethod.POST)
-  public ResponseResult<String> register(@Valid @RequestBody(required = false) UserRegisterVO params) {
+  public ResponseResult<String> register(@Valid @RequestBody(required = false) UserVO.Register params) {
     if (params == null) {
       return ResponseResult.fail(ResultCode.CLIENT_ERROR, "参数不能为空");
     }
-
+    String account = params.getAccount();
+    boolean isHasAccount = userDAOImpl.findByAccont(account);
+    if (isHasAccount) {
+      // 账号已存在
+      return ResponseResult.fail(ResultCode.CLIENT_ERROR, "该账号已存在");
+    }
     String password = params.getPassword();
     String newPassword = PASSWORD_STR + password;
     String md5Password = DigestUtils.md5DigestAsHex(newPassword.getBytes());
     String userId = String.valueOf(System.currentTimeMillis());
 
-    UserBean userBean = new UserBean(0, params.getAccount(),
+    UserBean userBean = new UserBean(0,
+        account,
         params.getUsername(), md5Password, "", 1, 1, userId);
     boolean isInsertSuccess = userDAOImpl.addUser(userBean);
     if (isInsertSuccess) {
@@ -78,5 +84,20 @@ public class UserController {
       return ResponseResult.success(token, "注册成功");
     }
     return ResponseResult.fail("注册失败");
+  }
+
+  /**
+   * 修改密码
+   * 
+   * @param params
+   * @return
+   */
+  @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+  public ResponseResult<Boolean> updatePassword(@Valid @RequestBody(required = false) UserVO.UpdatePassword params) {
+    if (params == null) {
+      return ResponseResult.fail(ResultCode.CLIENT_ERROR, "参数不能为空");
+    }
+
+    return ResponseResult.fail("修改失败");
   }
 }

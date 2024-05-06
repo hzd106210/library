@@ -67,4 +67,11 @@ public class UserDAOImpl implements UserDAO {
     }
   }
 
+  @Override
+  public boolean findByAccont(String account) {
+    String sql = "select 1 from user where account=? limit 1";
+    Number exist = jdbcTemplate.queryForObject(sql, Number.class, account);
+    return exist != null;
+  }
+
 }

@@ -40,4 +40,12 @@ public interface UserDAO {
    * @return
    */
   UserBean findByAccount(String account);
+
+  /**
+   * 通过账号查找该账号是否存在
+   * 
+   * @param account
+   * @return
+   */
+  boolean findByAccont(String account);
 }
