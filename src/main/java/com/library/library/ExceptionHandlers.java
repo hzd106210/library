@@ -7,19 +7,22 @@
  */
 package com.library.library;
 
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import com.library.library.controller.ResponseResult;
 
 @RestControllerAdvice
 public class ExceptionHandlers {
-  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ExceptionHandler(value = MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseResult<String> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
     System.err.println(e.toString());
@@ -27,6 +30,19 @@ public class ExceptionHandlers {
         .map(f -> f.getDefaultMessage())
         .collect(Collectors.joining("| "));
     return ResponseResult.fail(null, errMsg);
+  }
+
+  @ExceptionHandler(value = Exception.class)
+  @ResponseBody
+  public ResponseResult<String> handleAnyException(Exception ex, WebRequest request) {
+    return ResponseResult.fail(ex.getMessage());
+  }
+
+  @ExceptionHandler(value = SQLException.class)
+  @ResponseStatus
+  public ResponseResult<String> sqlError(SQLException e) {
+    e.printStackTrace();
+    return ResponseResult.fail(e.getMessage());
   }
 
   // 全局处理没有请求体抛出的错误

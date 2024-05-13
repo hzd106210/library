@@ -3,6 +3,7 @@ package com.library.library.DAO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -22,42 +23,66 @@ public class BookDAOImpl implements BookDAO {
   @Override
   public ListBean<BookBean> findAll(BookVO.QueryAll params) {
     int pageNo = params.getPageNo();
-    int pageSize = params.getPageSize();
+    Integer pageSize = params.getPageSize();
+    if (pageSize == null) {
+      pageSize = 10;
+    }
     int startRow = (pageNo - 1) * pageSize;
     String name = params.getName();
     String publishingHouse = params.getPublishingHouse();
-    int status = params.getStatus();
-    int stock = params.getStock();
-    int borrowNum = params.getBorrowNum();
-    String sql = "select * from book where create_time > (select create_time from book order by create_time desc limit ?,1) ";
+    Integer status = params.getStatus();
+    Integer stock = params.getStock();
+    Integer borrowNum = params.getBorrowNum();
+    String sql = "select * from book";
+    String sql2 = "select count(id) from book";
     List<Object> queryList = new ArrayList<>();
-    queryList.add(startRow - 1);
-    if (!name.equals("")) {
-      sql += "and (auth like '%?' or name like '%?')";
+    List<Object> countList = new ArrayList<>();
+    if (pageNo != 1) {
+      sql += " where create_time < (select create_time from book order by create_time desc limit ?,1)";
+      queryList.add(startRow == 0 ? 0 : startRow - 1);
+    } else {
+      sql += " where create_time > 0";
+    }
+
+    if (name != null) {
+      String _sql = " and (auth like '%?' or name like '%?')";
+      sql += _sql;
+      sql2 += _sql;
       queryList.add(name);
+      countList.add(name);
     }
-    if (!publishingHouse.equals("")) {
-      sql += "and publishing_house like '%?'";
-      queryList.add(publishingHouse);
+    if (publishingHouse != null) {
+      String _sql = " and publishing_house like '%" + publishingHouse + "%'";
+      sql += _sql;
+      sql2 += _sql;
     }
-    if (!String.valueOf(status).equals("")) {
-      sql += "and status=?";
+    if (status != null) {
+      String _sql = " and status=?";
+      sql += _sql;
+      sql2 += _sql;
       queryList.add(status);
+      countList.add(status);
     }
-    if (!String.valueOf(stock).equals("")) {
-      sql += "and stock>=?";
+    if (stock != null) {
+      String _sql = " and stock>=?";
+      sql += _sql;
+      sql2 += _sql;
       queryList.add(stock);
+      countList.add(stock);
     }
-    if (!String.valueOf(borrowNum).equals("")) {
-      sql += "and borrow_num>=?";
+    if (borrowNum != null) {
+      String _sql = " and borrow_num>=?";
+      sql += _sql;
+      sql2 += _sql + ";";
       queryList.add(borrowNum);
+      countList.add(borrowNum);
     }
-    sql += "limit ?;";
+    Integer count = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
+    sql += " order by create_time desc limit ?;";
     queryList.add(pageSize);
     List<BookBean> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookBean>(BookBean.class),
         queryList.toArray());
-    int count = this.count();
-    ListBean<BookBean> res = new ListBean<BookBean>(list, count);
+    ListBean<BookBean> res = new ListBean<BookBean>(list, count == null ? 0 : count.intValue());
     return res;
   }
 
@@ -77,7 +102,7 @@ public class BookDAOImpl implements BookDAO {
 
   @Override
   public boolean update(BookBean book) {
-    String sql = "update book set cover=?,name=?,desc=?,auth=?,publishing_house=?,type=?,stock=?,status=? where id=?";
+    String sql = "update book set `cover`=?,`name`=?,`desc`=?,`auth`=?,`publishing_house`=?,`type`=?,`stock`=?,`status`=? where `id`=?";
     int update = jdbcTemplate.update(sql, book.getCover(), book.getName(), book.getDesc(), book.getAuth(),
         book.getPublishingHouse(),
         book.getType(), book.getStock(), book.getStatus(), book.getId());
@@ -107,13 +132,44 @@ public class BookDAOImpl implements BookDAO {
       Integer exist = jdbcTemplate.queryForObject(sql, Integer.class, name, auth, publishingHouse);
       return exist != null;
     } catch (DataAccessException e) {
-      e.printStackTrace();
       if (e.getMessage().indexOf("expected 1") > -1) {
         return false;
       } else {
         throw e;
       }
     }
+  }
+
+  @Override
+  public boolean deleteBook(long id) {
+    String sql = "delete from book where `id`=?";
+    int update = jdbcTemplate.update(sql, id);
+    return update > 0;
+  }
+
+  @Override
+  public boolean isSameBook(Map<String, Object> params) {
+    try {
+      String sql = "select 1 from book where `name`=? and `auth`=? and `publishing_house`=? and `id`!=?";
+      Integer exist = jdbcTemplate.queryForObject(sql, Integer.class, params.get("name"), params.get("auth"),
+          params.get("publishingHouse"), params.get("id"));
+      return exist == null;
+    } catch (DataAccessException e) {
+      if (e.getMessage().indexOf("expected 1") > -1) {
+        return true;
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  @Override
+  public boolean updateBookStatus(Map<String, Object> params) {
+    long id = Long.parseLong(params.get("id").toString());
+    int status = Integer.parseInt(params.get("status").toString());
+    String sql = "update book set `status`=? where `id`=?";
+    int update = jdbcTemplate.update(sql, status, id);
+    return update > 0;
   }
 
 }

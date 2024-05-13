@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 public class BookVO {
@@ -46,7 +47,7 @@ public class BookVO {
 
   @Data
   static class UpdateBook {
-    @NotBlank(message = "id不能为空")
+    @NotNull(message = "id不能为空")
     private long id;
     /* 封面 */
     private String cover;
@@ -85,19 +86,33 @@ public class BookVO {
 
   @Data
   public static class QueryAll {
-    @NotBlank(message = "pageNo不能为空")
+    @NotNull(message = "pageNo不能为空")
     private int pageNo;
 
-    private int pageSize;
+    private Integer pageSize;
 
     private String name;
 
     private String publishingHouse;
 
+    private Integer status;
+
+    private Integer stock;
+
+    private Integer borrowNum;
+  }
+
+  @Data
+  public static class DeleteBook {
+    @NotNull(message = "id不能为空")
+    private long id;
+  }
+
+  @Data
+  public static class UpdateBookStatus {
+    @NotNull(message = "id不能为空")
+    private long id;
+    @NotNull(message = "status不能为空")
     private int status;
-
-    private int stock;
-
-    private int borrowNum;
   }
 }
