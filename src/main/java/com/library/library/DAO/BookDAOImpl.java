@@ -33,52 +33,53 @@ public class BookDAOImpl implements BookDAO {
     Integer status = params.getStatus();
     Integer stock = params.getStock();
     Integer borrowNum = params.getBorrowNum();
-    String sql = "select * from book";
-    String sql2 = "select count(id) from book";
+    String sql = "select b.id,b.cover,b.name,b.auth,b.desc,b.publishing_house,b.stock,b.borrow_num,b.create_time,b.status,bt.id as book_type_id,bt.name as book_type_name from book b left join book_type bt on b.type=bt.id";
+    String sql2 = "select count(b.id) from book b";
     List<Object> queryList = new ArrayList<>();
     List<Object> countList = new ArrayList<>();
     if (pageNo != 1) {
-      sql += " where create_time < (select create_time from book order by create_time desc limit ?,1)";
+      sql += " where b.create_time < (select create_time from book order by create_time desc limit ?,1)";
       queryList.add(startRow == 0 ? 0 : startRow - 1);
     } else {
-      sql += " where create_time > 0";
+      sql += " where b.create_time > 0";
     }
+    sql2 += " where b.id > 0";
 
     if (name != null) {
-      String _sql = " and (auth like '%?' or name like '%?')";
+      String _sql = " and (b.auth like '%?' or b.name like '%?')";
       sql += _sql;
       sql2 += _sql;
       queryList.add(name);
       countList.add(name);
     }
     if (publishingHouse != null) {
-      String _sql = " and publishing_house like '%" + publishingHouse + "%'";
+      String _sql = " and b.publishing_house like '%" + publishingHouse + "%'";
       sql += _sql;
       sql2 += _sql;
     }
     if (status != null) {
-      String _sql = " and status=?";
+      String _sql = " and b.status=?";
       sql += _sql;
       sql2 += _sql;
       queryList.add(status);
       countList.add(status);
     }
     if (stock != null) {
-      String _sql = " and stock>=?";
+      String _sql = " and b.stock>=?";
       sql += _sql;
       sql2 += _sql;
       queryList.add(stock);
       countList.add(stock);
     }
     if (borrowNum != null) {
-      String _sql = " and borrow_num>=?";
+      String _sql = " and b.borrow_num>=?";
       sql += _sql;
       sql2 += _sql + ";";
       queryList.add(borrowNum);
       countList.add(borrowNum);
     }
     Integer count = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
-    sql += " order by create_time desc limit ?;";
+    sql += " order by b.create_time desc limit ?";
     queryList.add(pageSize);
     List<BookBean> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookBean>(BookBean.class),
         queryList.toArray());

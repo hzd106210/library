@@ -59,7 +59,7 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserBean findByAccount(String account) {
     try {
-      String sql = "select * from user where account=?";
+      String sql = "select * from user where `account`=?";
       UserBean user = jdbcTemplate.queryForObject(sql, UserBean.class, account);
       return user;
     } catch (Exception e) {

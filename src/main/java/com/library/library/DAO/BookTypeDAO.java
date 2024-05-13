@@ -16,4 +16,6 @@ public interface BookTypeDAO {
   boolean deleteTypeById(long id);
 
   boolean hasType(String name);
+
+  BookTypeBean findById(long id);
 }

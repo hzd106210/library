@@ -34,6 +34,12 @@ public class BookBean {
   /* 类型 */
   private String type;
 
+  @Column(name = "book_type_id", nullable = true)
+  private Long bookTypeId;
+
+  @Column(name = "book_type_name", nullable = true)
+  private String bookTypeName;
+
   /* 库存 */
   private int stock;
 

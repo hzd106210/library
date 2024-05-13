@@ -61,4 +61,11 @@ public class BookTypeDAOImpl implements BookTypeDAO {
     List<BookTypeBean> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookTypeBean>(BookTypeBean.class));
     return list;
   }
+
+  @Override
+  public BookTypeBean findById(long id) {
+    String sql = "select * from book_type where id=?;";
+    BookTypeBean bookType = jdbcTemplate.queryForObject(sql, BookTypeBean.class, id);
+    return bookType;
+  }
 }
