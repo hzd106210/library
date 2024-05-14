@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.library.library.DAO.UserDAOImpl;
 import com.library.library.DAO.UserTokenDaoImpl;
+import com.library.library.DAO.UserTypeDAOImpl;
 import com.library.library.bean.UserBean;
 import com.library.library.utils.UserToken;
 
@@ -23,13 +24,16 @@ public class UserController {
   @Autowired
   private UserTokenDaoImpl userTokenDaoImpl;
 
+  @Autowired
+  private UserTypeDAOImpl userTypeDAOImpl;
+
   private static final String PASSWORD_STR = "__library__";
 
   /*
    * 登录
    */
   @RequestMapping(method = RequestMethod.POST, value = "/login")
-  public ResponseResult<String> login(@Valid @RequestBody(required = false) UserVO.Login params) {
+  public ResponseResult<UserVO.LoginResult> login(@Valid @RequestBody(required = false) UserVO.Login params) {
     if (params == null) {
       return ResponseResult.fail(ResultCode.CLIENT_ERROR, "参数不能为空");
     }
@@ -41,14 +45,17 @@ public class UserController {
       String password = params.getPassword();
       String newPassword = PASSWORD_STR + password;
       String md5Password = DigestUtils.md5DigestAsHex(newPassword.getBytes());
-      if (user.getPassword() != md5Password) {
+      if (!user.getPassword().equals(md5Password)) {
         msg = "密码错误";
       } else {
         String userId = user.getUserId();
         String token = UserToken.getToken(userId);
+
         // 保存token
         userTokenDaoImpl.insertToken(userId, token);
-        return ResponseResult.success(token, "登录成功");
+
+        int type = userTypeDAOImpl.findType(user.getTypeId());
+        return ResponseResult.success(new UserVO.LoginResult(token, type), "登录成功");
       }
     }
     return ResponseResult.fail(null, msg);
@@ -75,7 +82,7 @@ public class UserController {
 
     UserBean userBean = new UserBean(0,
         account,
-        params.getUsername(), md5Password, "", 1, 1, userId);
+        params.getUsername(), md5Password, "", 2, 1, userId);
     boolean isInsertSuccess = userDAOImpl.addUser(userBean);
     if (isInsertSuccess) {
       String token = UserToken.getToken(userId);

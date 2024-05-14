@@ -2,7 +2,9 @@ package com.library.library.controller;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class UserVO {
   /*
@@ -42,4 +44,12 @@ public class UserVO {
     private String password;
   }
 
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class LoginResult {
+    private String token;
+    private int type;
+
+  }
 }

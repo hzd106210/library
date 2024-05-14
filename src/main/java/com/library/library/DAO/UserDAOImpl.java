@@ -60,8 +60,8 @@ public class UserDAOImpl implements UserDAO {
   public UserBean findByAccount(String account) {
     try {
       String sql = "select * from user where `account`=?";
-      UserBean user = jdbcTemplate.queryForObject(sql, UserBean.class, account);
-      return user;
+      List<UserBean> user = jdbcTemplate.query(sql, new BeanPropertyRowMapper<UserBean>(UserBean.class), account);
+      return user.size() > 0 ? user.get(0) : null;
     } catch (Exception e) {
       return null;
     }
@@ -69,9 +69,13 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public boolean findByAccont(String account) {
-    String sql = "select 1 from user where account=? limit 1";
-    Number exist = jdbcTemplate.queryForObject(sql, Number.class, account);
-    return exist != null;
+    try {
+      String sql = "select 1 from user where account=? limit 1";
+      Number exist = jdbcTemplate.queryForObject(sql, Number.class, account);
+      return exist != null;
+    } catch (DataAccessException e) {
+      return false;
+    }
   }
 
 }
