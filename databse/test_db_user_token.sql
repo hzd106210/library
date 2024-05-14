@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for macos14 (x86_64)
 --
--- Host: 127.0.0.1    Database: test_db
+-- Host: localhost    Database: test_db
 -- ------------------------------------------------------
 -- Server version	8.3.0
 
@@ -30,7 +30,7 @@ CREATE TABLE `user_token` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `token_UNIQUE` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `user_token` (
 
 LOCK TABLES `user_token` WRITE;
 /*!40000 ALTER TABLE `user_token` DISABLE KEYS */;
-INSERT INTO `user_token` VALUES (1,'1715663214587','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNzE1NjYzMjE0NTg3IiwiZXhwIjo5MjIzMzcyMDM2ODU0Nzc1fQ.bL2xuqtz0N-tXBPIXha3p0Ct3abopz6thXPFlCSZHCw');
+INSERT INTO `user_token` VALUES (1,'1715663214587','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNzE1NjYzMjE0NTg3IiwiZXhwIjo5MjIzMzcyMDM2ODU0Nzc1fQ.bL2xuqtz0N-tXBPIXha3p0Ct3abopz6thXPFlCSZHCw'),(2,'1715694772893','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNzE1Njk0NzcyODkzIiwiZXhwIjo5MjIzMzcyMDM2ODU0Nzc1fQ.VZJDPJ7m67NbqkZkI8y3vaH_t3aQD1ZpwNVo25I9Uys'),(3,'1715699524705','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNzE1Njk5NTI0NzA1IiwiZXhwIjo5MjIzMzcyMDM2ODU0Nzc1fQ.1qMDjVnPacZkuaamidkDh2bK1BDXcX91fiBOVHA3PZo');
 /*!40000 ALTER TABLE `user_token` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-14 18:40:34
+-- Dump completed on 2024-05-14 23:23:16

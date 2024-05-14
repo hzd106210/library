@@ -1,8 +1,12 @@
 package com.library.library.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.library.library.bean.ListBean;
 import com.library.library.bean.UserBean;
+import com.library.library.bean.UserResultBean;
+import com.library.library.controller.UserVO.GetAllUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -76,6 +80,51 @@ public class UserDAOImpl implements UserDAO {
     } catch (DataAccessException e) {
       return false;
     }
+  }
+
+  @Override
+  public ListBean<UserResultBean> findAllUser(GetAllUser params) {
+    int pageNo = params.getPageNo();
+    Integer pageSize = params.getPageSize();
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+    String sql = "select u.id,u.username,u.avatar,u.status,u.user_id,ut.type from user u left join user_type ut on u.type_id=ut.id";
+    String sql2 = "select count(u.id) from user u";
+
+    int startRow = (pageNo - 1) * pageSize;
+    String userId = params.getUserId();
+    Object username = params.getUsername();
+    ArrayList<Object> queryList = new ArrayList<>();
+    ArrayList<Object> countList = new ArrayList<>();
+    if (pageNo != 1) {
+      sql += " where u.id < (select id from user order by id desc limit ?,1)";
+      queryList.add(startRow == 0 ? 0 : startRow - 1);
+    }
+
+    if (userId != null) {
+      sql += " and b.user_id=?";
+      sql2 += (countList.size() > 0 ? "" : " where") + " b.user_id=?";
+      queryList.add(userId);
+      countList.add(userId);
+    }
+
+    if (username != null) {
+      sql += " and b.username=?";
+      sql2 += (countList.size() > 0 ? "" : " where") + " b.user_id=?";
+      queryList.add(username);
+      countList.add(username);
+    }
+
+    sql += " order by u.id desc limit ?";
+    queryList.add(pageSize);
+
+    List<UserResultBean> userList = jdbcTemplate.query(sql,
+        new BeanPropertyRowMapper<UserResultBean>(UserResultBean.class),
+        queryList.toArray());
+    Integer total = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
+    ListBean<UserResultBean> res = new ListBean<UserResultBean>(userList, total);
+    return res;
   }
 
 }

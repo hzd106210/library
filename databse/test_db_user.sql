@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for macos14 (x86_64)
 --
--- Host: 127.0.0.1    Database: test_db
+-- Host: localhost    Database: test_db
 -- ------------------------------------------------------
 -- Server version	8.3.0
 
@@ -33,7 +33,7 @@ CREATE TABLE `user` (
   `user_id` varchar(50) NOT NULL COMMENT '用户id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (2,'12312','123','123123','',1,1,'1714919627418'),(3,'admin','admin','03d9ff7521a98b2a3da92fe581277f8e','',1,1,'1715663214587');
+INSERT INTO `user` VALUES (3,'admin','admin','03d9ff7521a98b2a3da92fe581277f8e','',1,1,'1715663214587'),(4,'hzd','hzd','b4f55afa84dcd28f5c3a23f153fb88a1','',2,1,'1715694772893'),(5,'zhangsan','zhangsan','8d2e2f76e0d448a7efbbcd9e7b6a427a','',2,1,'1715699524705');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-14 18:40:34
+-- Dump completed on 2024-05-14 23:23:17

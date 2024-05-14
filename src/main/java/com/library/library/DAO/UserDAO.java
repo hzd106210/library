@@ -2,7 +2,10 @@ package com.library.library.DAO;
 
 import java.util.List;
 
+import com.library.library.bean.ListBean;
 import com.library.library.bean.UserBean;
+import com.library.library.bean.UserResultBean;
+import com.library.library.controller.UserVO;
 
 public interface UserDAO {
   List<UserBean> findAll();
@@ -48,4 +51,6 @@ public interface UserDAO {
    * @return
    */
   boolean findByAccont(String account);
+
+  ListBean<UserResultBean> findAllUser(UserVO.GetAllUser params);
 }

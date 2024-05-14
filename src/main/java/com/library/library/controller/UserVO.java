@@ -1,9 +1,12 @@
 package com.library.library.controller;
 
+import com.library.library.bean.PageBean;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 public class UserVO {
@@ -51,5 +54,14 @@ public class UserVO {
     private String token;
     private int type;
 
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @EqualsAndHashCode(callSuper = false)
+  public static class GetAllUser extends PageBean {
+    private String username;
+    private String userId;
   }
 }

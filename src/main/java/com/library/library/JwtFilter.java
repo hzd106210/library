@@ -63,6 +63,7 @@ public class JwtFilter implements Filter {
         res.getWriter().write(objectMapper.writeValueAsString(ResponseResult.fail("请重新登录")));
         return;
       }
+
       chain.doFilter(req, res);
     }
   }

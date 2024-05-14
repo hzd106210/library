@@ -2,6 +2,7 @@ package com.library.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.library.library.DAO.UserDAOImpl;
 import com.library.library.DAO.UserTokenDaoImpl;
 import com.library.library.DAO.UserTypeDAOImpl;
+import com.library.library.bean.ListBean;
 import com.library.library.bean.UserBean;
+import com.library.library.bean.UserResultBean;
 import com.library.library.utils.UserToken;
 
 import jakarta.validation.Valid;
@@ -106,5 +109,11 @@ public class UserController {
     }
 
     return ResponseResult.fail("修改失败");
+  }
+
+  @PostMapping(value = "/getAllUser")
+  public ResponseResult<ListBean<UserResultBean>> getAllUser(@Valid @RequestBody UserVO.GetAllUser params) {
+    ListBean<UserResultBean> list = userDAOImpl.findAllUser(params);
+    return ResponseResult.success(list, "查询成功");
   }
 }
