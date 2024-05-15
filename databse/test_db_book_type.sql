@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for macos14 (x86_64)
 --
--- Host: 127.0.0.1    Database: test_db
+-- Host: localhost    Database: test_db
 -- ------------------------------------------------------
 -- Server version	8.3.0
 
@@ -26,7 +26,7 @@ CREATE TABLE `book_type` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `book_type` (
 
 LOCK TABLES `book_type` WRITE;
 /*!40000 ALTER TABLE `book_type` DISABLE KEYS */;
-INSERT INTO `book_type` VALUES (12,'生活类'),(13,'社会科学'),(14,'文学类'),(15,'艺术'),(16,'哲学类'),(17,'历史类'),(18,'娱乐时尚');
+INSERT INTO `book_type` VALUES (12,'生活类'),(13,'社会科学'),(14,'文学类'),(15,'艺术'),(16,'哲学类'),(17,'历史类'),(18,'娱乐时尚'),(19,'中文书籍'),(20,'英文书籍'),(21,'俄文书籍'),(22,'德文书籍'),(23,'日文书籍'),(25,'中文期刊'),(26,'英文期刊'),(27,'俄文期刊'),(28,'德文期刊'),(29,'日文期刊');
 /*!40000 ALTER TABLE `book_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-15 18:38:00
+-- Dump completed on 2024-05-15 23:25:44

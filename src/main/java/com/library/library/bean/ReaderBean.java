@@ -24,4 +24,7 @@ public class ReaderBean {
 
   @Column(name = "library_id")
   private int libraryId;
+
+  @Column(name = "user_id")
+  private long userId;
 }

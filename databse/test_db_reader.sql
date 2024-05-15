@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for macos14 (x86_64)
 --
--- Host: 127.0.0.1    Database: test_db
+-- Host: localhost    Database: test_db
 -- ------------------------------------------------------
 -- Server version	8.3.0
 
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-15 18:38:00
+-- Dump completed on 2024-05-15 23:25:45

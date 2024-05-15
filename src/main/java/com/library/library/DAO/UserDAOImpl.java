@@ -7,6 +7,7 @@ import com.library.library.bean.ListBean;
 import com.library.library.bean.UserBean;
 import com.library.library.bean.UserResultBean;
 import com.library.library.controller.UserVO.GetAllUser;
+import com.library.library.utils.SQL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -110,10 +111,9 @@ public class UserDAOImpl implements UserDAO {
     }
 
     if (username != null && !username.equals("")) {
-      sql += (queryList.size() > 0 ? " and" : " where") + " u.username=?";
-      sql2 += (countList.size() > 0 ? "" : " where") + " u.username=?";
-      queryList.add(username);
-      countList.add(username);
+      String _sql = " u.username like '%" + username + "%'";
+      sql = SQL.insertSqlWhereAnd(sql, _sql);
+      sql2 = SQL.insertSqlWhereAnd(sql2, _sql);
     }
     sql += " order by u.id desc limit ?";
     queryList.add(pageSize.intValue());
