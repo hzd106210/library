@@ -16,27 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `book_type`
+-- Table structure for table `reader`
 --
 
-DROP TABLE IF EXISTS `book_type`;
+DROP TABLE IF EXISTS `reader`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `book_type` (
+CREATE TABLE `reader` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `name` varchar(50) NOT NULL,
+  `type` int NOT NULL COMMENT '0:本单位  1:馆际互借认可',
+  `contact` varchar(45) NOT NULL,
+  `borrow_card_number` varchar(200) DEFAULT NULL,
+  `library_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `library_id_idx` (`library_id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `library_id` FOREIGN KEY (`library_id`) REFERENCES `library` (`id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `book_type`
+-- Dumping data for table `reader`
 --
 
-LOCK TABLES `book_type` WRITE;
-/*!40000 ALTER TABLE `book_type` DISABLE KEYS */;
-INSERT INTO `book_type` VALUES (12,'生活类'),(13,'社会科学'),(14,'文学类'),(15,'艺术'),(16,'哲学类'),(17,'历史类'),(18,'娱乐时尚');
-/*!40000 ALTER TABLE `book_type` ENABLE KEYS */;
+LOCK TABLES `reader` WRITE;
+/*!40000 ALTER TABLE `reader` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reader` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

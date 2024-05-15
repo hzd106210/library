@@ -16,27 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `book_type`
+-- Table structure for table `library`
 --
 
-DROP TABLE IF EXISTS `book_type`;
+DROP TABLE IF EXISTS `library`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `book_type` (
+CREATE TABLE `library` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `name` varchar(100) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `contact` varchar(100) NOT NULL COMMENT '联系方式，可以是手机号、邮箱',
+  `contact_person` varchar(50) NOT NULL COMMENT '联系人姓名',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `book_type`
+-- Dumping data for table `library`
 --
 
-LOCK TABLES `book_type` WRITE;
-/*!40000 ALTER TABLE `book_type` DISABLE KEYS */;
-INSERT INTO `book_type` VALUES (12,'生活类'),(13,'社会科学'),(14,'文学类'),(15,'艺术'),(16,'哲学类'),(17,'历史类'),(18,'娱乐时尚');
-/*!40000 ALTER TABLE `book_type` ENABLE KEYS */;
+LOCK TABLES `library` WRITE;
+/*!40000 ALTER TABLE `library` DISABLE KEYS */;
+/*!40000 ALTER TABLE `library` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
