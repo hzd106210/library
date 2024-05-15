@@ -14,6 +14,7 @@ import com.library.library.DAO.UserTypeDAOImpl;
 import com.library.library.bean.ListBean;
 import com.library.library.bean.UserBean;
 import com.library.library.bean.UserResultBean;
+import com.library.library.controller.UserVO.UpdateStatus;
 import com.library.library.utils.UserToken;
 
 import jakarta.validation.Valid;
@@ -44,6 +45,8 @@ public class UserController {
     UserBean user = userDAOImpl.findByAccount(params.getAccount());
     if (user == null) {
       msg = "账号不存在";
+    } else if (user.getStatus() == 0) {
+      msg = "该账号已停用";
     } else {
       String password = params.getPassword();
       String newPassword = PASSWORD_STR + password;
@@ -115,5 +118,14 @@ public class UserController {
   public ResponseResult<ListBean<UserResultBean>> getAllUser(@Valid @RequestBody UserVO.GetAllUser params) {
     ListBean<UserResultBean> list = userDAOImpl.findAllUser(params);
     return ResponseResult.success(list, "查询成功");
+  }
+
+  @PostMapping(value = "/updateStaus")
+  public ResponseResult<Boolean> updateStaus(@Valid @RequestBody UserVO.UpdateStatus params) {
+    boolean updateStatus = userDAOImpl.updateStatus(params.getId(), params.getStatus());
+    if (updateStatus) {
+      return ResponseResult.success(true, "修改成功");
+    }
+    return ResponseResult.fail("修改失败");
   }
 }

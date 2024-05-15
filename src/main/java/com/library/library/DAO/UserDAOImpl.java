@@ -102,22 +102,21 @@ public class UserDAOImpl implements UserDAO {
       queryList.add(startRow == 0 ? 0 : startRow - 1);
     }
 
-    if (userId != null) {
-      sql += " and b.user_id=?";
-      sql2 += (countList.size() > 0 ? "" : " where") + " b.user_id=?";
+    if (userId != null && !userId.equals("")) {
+      sql += (queryList.size() > 0 ? " and" : " where") + " u.user_id=?";
+      sql2 += (countList.size() > 0 ? "" : " where") + " u.user_id=?";
       queryList.add(userId);
       countList.add(userId);
     }
 
-    if (username != null) {
-      sql += " and b.username=?";
-      sql2 += (countList.size() > 0 ? "" : " where") + " b.user_id=?";
+    if (username != null && !username.equals("")) {
+      sql += (queryList.size() > 0 ? " and" : " where") + " u.username=?";
+      sql2 += (countList.size() > 0 ? "" : " where") + " u.username=?";
       queryList.add(username);
       countList.add(username);
     }
-
     sql += " order by u.id desc limit ?";
-    queryList.add(pageSize);
+    queryList.add(pageSize.intValue());
 
     List<UserResultBean> userList = jdbcTemplate.query(sql,
         new BeanPropertyRowMapper<UserResultBean>(UserResultBean.class),
@@ -125,6 +124,13 @@ public class UserDAOImpl implements UserDAO {
     Integer total = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
     ListBean<UserResultBean> res = new ListBean<UserResultBean>(userList, total);
     return res;
+  }
+
+  @Override
+  public boolean updateStatus(long id, int status) {
+    String sql = "update user set `status`=? where id=?";
+    int update = jdbcTemplate.update(sql, status, id);
+    return update > 0;
   }
 
 }

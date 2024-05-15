@@ -64,4 +64,14 @@ public class UserVO {
     private String username;
     private String userId;
   }
+
+  @Data
+  public static class UpdateStatus {
+    @NotNull(message = "id不能为空")
+    private long id;
+
+    @NotNull(message = "status不能为空")
+    private int status;
+  }
+
 }

@@ -53,4 +53,6 @@ public interface UserDAO {
   boolean findByAccont(String account);
 
   ListBean<UserResultBean> findAllUser(UserVO.GetAllUser params);
+
+  boolean updateStatus(long id, int status);
 }

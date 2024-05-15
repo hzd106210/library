@@ -14,7 +14,6 @@ public class MD5Util {
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     } catch (UnsupportedEncodingException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     String md5Str = new BigInteger(1, digest).toString();
