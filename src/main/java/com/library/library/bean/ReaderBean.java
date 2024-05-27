@@ -25,6 +25,11 @@ public class ReaderBean {
   @Column(name = "library_id")
   private int libraryId;
 
+  @Column(name = "library_name")
+  private String libraryName;
+
   @Column(name = "user_id")
   private long userId;
+
+  private int status;
 }

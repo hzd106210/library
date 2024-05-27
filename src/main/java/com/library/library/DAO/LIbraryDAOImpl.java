@@ -34,7 +34,7 @@ public class LIbraryDAOImpl implements LIbraryDAO {
     List<Object> queryList = new ArrayList<>();
     List<Object> countList = new ArrayList<>();
 
-    if (pageNo != 1) {
+    if (pageNo != 1 && pageNo != -1) {
       sql += " where id < (select id from library order by id desc limit ?,1)";
       queryList.add(startRow == 0 ? 0 : startRow - 1);
     }
@@ -45,12 +45,20 @@ public class LIbraryDAOImpl implements LIbraryDAO {
       sql2 = SQL.insertSqlWhereAnd(sql2, _sql);
     }
 
-    sql += " order by id desc limit ?";
-    queryList.add(pageSize.intValue());
+    sql += " order by id desc";
+    if (pageNo != -1) {
+      sql += "  limit ?";
+      queryList.add(pageSize.intValue());
+    }
 
     List<LibraryBean> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<LibraryBean>(LibraryBean.class),
         queryList.toArray());
-    Integer count = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
+    int count;
+    if (pageNo == -1) {
+      count = list.size();
+    } else {
+      count = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
+    }
     ListBean<LibraryBean> res = new ListBean<LibraryBean>(list, count);
     return res;
   }

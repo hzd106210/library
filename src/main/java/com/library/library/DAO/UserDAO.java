@@ -55,4 +55,6 @@ public interface UserDAO {
   ListBean<UserResultBean> findAllUser(UserVO.GetAllUser params);
 
   boolean updateStatus(long id, int status);
+
+  long findIdByUserId(String userId);
 }

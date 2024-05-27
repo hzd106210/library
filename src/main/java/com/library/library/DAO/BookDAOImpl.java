@@ -37,7 +37,7 @@ public class BookDAOImpl implements BookDAO {
     String sql2 = "select count(b.id) from book b";
     List<Object> queryList = new ArrayList<>();
     List<Object> countList = new ArrayList<>();
-    if (pageNo != 1) {
+    if (pageNo != 1 && pageNo != -1) {
       sql += " where b.create_time < (select create_time from book order by create_time desc limit ?,1)";
       queryList.add(startRow == 0 ? 0 : startRow - 1);
     } else {
@@ -78,12 +78,22 @@ public class BookDAOImpl implements BookDAO {
       queryList.add(borrowNum);
       countList.add(borrowNum);
     }
-    Integer count = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
-    sql += " order by b.create_time desc limit ?";
-    queryList.add(pageSize);
+
+    if (pageNo != -1) {
+      sql += " order by b.create_time desc limit ?";
+      queryList.add(pageSize);
+    }
     List<BookBean> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookBean>(BookBean.class),
         queryList.toArray());
-    ListBean<BookBean> res = new ListBean<BookBean>(list, count == null ? 0 : count.intValue());
+
+    int count;
+    if (pageNo == -1) {
+      count = list.size();
+    } else {
+      count = jdbcTemplate.queryForObject(sql2, Integer.class, countList.toArray());
+    }
+
+    ListBean<BookBean> res = new ListBean<BookBean>(list, count);
     return res;
   }
 

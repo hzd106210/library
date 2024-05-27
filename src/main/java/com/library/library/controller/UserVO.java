@@ -1,5 +1,7 @@
 package com.library.library.controller;
 
+import org.springframework.context.annotation.Primary;
+
 import com.library.library.bean.PageBean;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -45,6 +47,12 @@ public class UserVO {
     private String username;
     @NotEmpty(message = "密码不能为空")
     private String password;
+
+    @NotEmpty(message = "手机号不能为空")
+    private String phone;
+
+    @NotNull(message = "性别不能为空")
+    private int gender;
   }
 
   @Data

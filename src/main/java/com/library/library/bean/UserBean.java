@@ -25,5 +25,8 @@ public class UserBean {
   private int status;
   @Column(name = "user_id")
   private String userId;
-  // TODO 缺少注册时间 登录时间需要？？
+
+  private String phone;
+
+  private int gender;
 }

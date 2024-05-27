@@ -1,5 +1,9 @@
 package com.library.library.DAO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 
 @Service("UserDAOImpl")
@@ -45,9 +51,18 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public boolean addUser(UserBean user) {
     try {
-      String sql = "insert into user (account,username,password,avatar,type_id,status,user_id) values (?,?,?,?,?,?,?)";
-      int update = jdbcTemplate.update(sql, user.getAccount(), user.getUsername(), user.getPassword(), user.getAvatar(),
-          user.getTypeId(), user.getStatus(), user.getUserId());
+      String sql = "insert into user (account,username,password,avatar,phone,type_id,status,user_id,gender) values (?,?,?,?,?,?,?,?,?)";
+      ArrayList<Object> arrayList = new ArrayList<>();
+      arrayList.add(user.getAccount());
+      arrayList.add(user.getUsername());
+      arrayList.add(user.getPassword());
+      arrayList.add(user.getAvatar());
+      arrayList.add(user.getPhone());
+      arrayList.add(user.getTypeId());
+      arrayList.add(user.getStatus());
+      arrayList.add(user.getUserId());
+      arrayList.add(user.getGender());
+      int update = jdbcTemplate.update(sql, arrayList.toArray());
       return update > 0;
     } catch (DataAccessException e) {
       e.printStackTrace();
@@ -131,6 +146,15 @@ public class UserDAOImpl implements UserDAO {
     String sql = "update user set `status`=? where id=?";
     int update = jdbcTemplate.update(sql, status, id);
     return update > 0;
+  }
+
+  @Override
+  public long findIdByUserId(String userId) {
+    String sql = "select id from user where user_id=?";
+
+    Long id = jdbcTemplate.queryForObject(sql, Long.class, userId);
+
+    return id;
   }
 
 }

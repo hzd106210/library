@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.library.library.DAO.ReaderDAOImpl;
 import com.library.library.DAO.UserDAOImpl;
 import com.library.library.DAO.UserTokenDaoImpl;
 import com.library.library.DAO.UserTypeDAOImpl;
 import com.library.library.bean.ListBean;
 import com.library.library.bean.UserBean;
 import com.library.library.bean.UserResultBean;
+import com.library.library.controller.ReaderVO.AddReader;
 import com.library.library.controller.UserVO.UpdateStatus;
 import com.library.library.utils.UserToken;
 
@@ -30,6 +32,9 @@ public class UserController {
 
   @Autowired
   private UserTypeDAOImpl userTypeDAOImpl;
+
+  @Autowired
+  private ReaderDAOImpl readerDAOImpl;
 
   private static final String PASSWORD_STR = "__library__";
 
@@ -85,15 +90,34 @@ public class UserController {
     String newPassword = PASSWORD_STR + password;
     String md5Password = DigestUtils.md5DigestAsHex(newPassword.getBytes());
     String userId = String.valueOf(System.currentTimeMillis());
+    String username = params.getUsername();
+    String phone = params.getPhone();
 
-    UserBean userBean = new UserBean(0,
-        account,
-        params.getUsername(), md5Password, "", 2, 1, userId);
-    boolean isInsertSuccess = userDAOImpl.addUser(userBean);
-    if (isInsertSuccess) {
+    UserBean userBean = new UserBean();
+    userBean.setAccount(account);
+    userBean.setUsername(username);
+    userBean.setPassword(md5Password);
+    userBean.setAvatar("");
+    userBean.setTypeId(2);
+    userBean.setStatus(1);
+    userBean.setUserId(userId);
+    userBean.setPhone(phone);
+    userBean.setGender(params.getGender());
+
+    boolean success = userDAOImpl.addUser(userBean);
+    if (success) {
+      AddReader addReader = new AddReader();
+      addReader.setName(username);
+      addReader.setType(1);
+      addReader.setContact(phone);
+      addReader.setLibraryId(0);
+      long id = userDAOImpl.findIdByUserId(userId);
+      addReader.setUserId(id);
+      readerDAOImpl.addReader(addReader);
       String token = UserToken.getToken(userId);
       // 保存token
       userTokenDaoImpl.insertToken(userId, token);
+
       return ResponseResult.success(token, "注册成功");
     }
     return ResponseResult.fail("注册失败");
